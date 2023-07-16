@@ -6,47 +6,6 @@ class ProductManager {
       this.nextId = 1;
   }
 
-  addProduct(title, description, price, thumbnail, code, stock) {
-    // Chequeo si el codigo existe o no
-    const existingProduct = this.products.find(product => product.code === code);
-    if (existingProduct) {
-    console.error(`El producto con el codigo '${code}' ya existe.`);
-    return;
-    }
-
-// Chequeo si todos las propiedades estan
-if (!title || !description || !price || !thumbnail || !code || !stock) {
-    console.error('Todos los campos son obligatorios.');
-    return;
-    }
-
-// Creo el producto
-const product = {
-    id: this.nextId,
-    title: title,
-    description: description,
-    price: price,
-    thumbnail: thumbnail,
-    code: code,
-    stock: stock
-};
-
-// Incremento el id para el proximo producto
-this.nextId++;
-
-// Agrego los productos al array
-this.products.push(product);
-}
-  
-  updateNextId() {
-      if (this.products.length === 0) {
-      this.nextId = 1;
-      } else {
-      const ids = this.products.map(product => product.id);
-      this.nextId = Math.max(...ids) + 1;
-      }
-  }
-
   loadProductsFromFile(filePath) {
     try {
     const jsonData = fs.readFileSync(filePath, 'utf8');
@@ -55,11 +14,52 @@ this.products.push(product);
     } catch (error) {
     console.error('Error cargando productos de este archivo:', error);
     }
-}
+ }
 
+ updateNextId() {
+  if (this.products.length === 0) {
+  this.nextId = 1;
+  } else {
+  const ids = this.products.map(product => product.id);
+  this.nextId = Math.max(...ids) + 1;
+  }
+ }
+
+  addProduct(title, description, price, thumbnail, code, stock) {
+    // Chequeo si el codigo existe o no
+    const existingProduct = this.products.find(product => product.code === code);
+    if (existingProduct) {
+    console.error(`El producto con el codigo '${code}' ya existe.`);
+    return;
+  }
+
+ // Chequeo si todos las propiedades estan
+ if (!title || !description || !price || !thumbnail || !code || !stock) {
+    console.error('Todos los campos son obligatorios.');
+    return;
+  }
+
+ // Creo el producto
+ const product = {
+    id: this.nextId,
+    title: title,
+    description: description,
+    price: price,
+    thumbnail: thumbnail,
+    code: code,
+    stock: stock
+ };
+
+ // Incremento el id para el proximo producto
+ this.nextId++;
+
+ // Agrego los productos al array
+ this.products.push(product);
+ }
+  
   getProducts() {
       return this.products;
-  }
+ }
 
   getProductById(id) {
       const product = this.products.find((product) => product.id === id);
